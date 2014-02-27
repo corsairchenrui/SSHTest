@@ -12,6 +12,14 @@ public class uploadAction extends ActionSupport {
 	private String uploadFileName;
 	private String allowTypes;
 	private String savePath;
+	private String generatedFile;
+	
+	public String getGeneratedFile() {
+		return generatedFile;
+	}
+	public void setGeneratedFile(String generatedFile) {
+		this.generatedFile = generatedFile;
+	}
 	public void setSavePath(String value) {
 		this.savePath = value;
 	}
@@ -73,11 +81,13 @@ public class uploadAction extends ActionSupport {
 
 	public String execute(){
 		try {
-			getUpload().renameTo(new File(getSavePath(),getUploadFileName()));
+			File generated = new File(getSavePath(),getUploadFileName());
+			getUpload().renameTo(generated);
+			generatedFile = generated.getAbsolutePath();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ERROR;
 		}
-		return SUCCESS;
+		return "download";
 	}
 }

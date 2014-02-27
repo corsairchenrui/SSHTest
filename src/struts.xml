@@ -11,10 +11,13 @@
 			<result name="error">/login.jsp</result>
 			<result name="success">/success.jsp</result>    
 		</action>
-		<action name="fileDownload class="downloadAction"">
+		<action name="fileDownload" class="downloadAction" method="execute">
 			<result name="success" type="stream">
-				<param name="bufferSize">40960</param>
-			</param></result>
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="contentDisposition">attachment;filename="1.png"</param>  
+				<param name="inputName">downloadFile</param>
+				<param name="bufferSize">4096</param>
+			</result>
 		</action>
 		<action name="upload" class="uploadAction" method="execute">
 			<interceptor-ref name="fileUpload"> 
@@ -23,7 +26,10 @@
 			</interceptor-ref>   
 			<interceptor-ref name="defaultStack" />
 			<param name="savePath">/tmp</param>
-			<result name="success">/download.jsp</result>    
+			<result name="download" type="chain">
+				<param name="actionName">fileDownload</param>
+                <param name="generatedFile">${generatedFile}</param>
+			</result>    
 		</action>
 	</package>
 
